@@ -1,7 +1,6 @@
 package com.br.project.HarmonyPalace.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.br.project.HarmonyPalace.entity.Usuario;
+import com.br.project.HarmonyPalace.entities.Usuario;
 import com.br.project.HarmonyPalace.repository.UsuarioInterface;
+import com.br.project.HarmonyPalace.service.UsuarioService;
 
 @RestController
 @CrossOrigin("*")
@@ -26,16 +26,20 @@ public class UsuarioController{
 	@Autowired
 	private UsuarioInterface dao;
 	
+	private UsuarioService usuarioService;
+	
+	public UsuarioController(UsuarioService usuarioService) {
+		this.usuarioService = usuarioService;
+	}
+	
 	@GetMapping	
-	public ResponseEntity<List<Usuario>> list () {
-		List<Usuario> lista = (List<Usuario>) dao.findAll();
-		return ResponseEntity.status(200).body(lista);
+	public ResponseEntity<List<Usuario>> listarUsuario() {
+		return ResponseEntity.status(200).body(usuarioService.listarUsuarios());
 	}
 	
 	@PostMapping
 	public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
-		Usuario usuarioNovo = dao.save(usuario);
-		return ResponseEntity.status(201).body(usuarioNovo);
+		return ResponseEntity.status(201).body(usuarioService.criarUsuario(usuario));
 	}
 	
 	@PutMapping

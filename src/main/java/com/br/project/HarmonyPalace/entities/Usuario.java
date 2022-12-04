@@ -1,4 +1,4 @@
-package com.br.project.HarmonyPalace.entity;
+package com.br.project.HarmonyPalace.entities;
 
 import java.time.LocalDateTime;
 
