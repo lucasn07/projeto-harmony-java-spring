@@ -1,6 +1,6 @@
 package com.br.project.HarmonyPalace.entity;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,10 +20,10 @@ public class Usuario {
 	private Integer id;
 
 	@Column(name = "id_status")
-	private Integer idStatus;
+	private Integer idStatus = 2;
 	
 	@Column(name = "id_acesso")
-	private Integer idAcesso;
+	private Integer idAcesso = 1;
 	
 	@Column(name = "email")
 	private String  email;
@@ -37,11 +37,11 @@ public class Usuario {
 	@Column(name = "telefone")
 	private String telefone;
 	
-	
+	@Column(name = "apartamento")
 	private Integer apartamento;
 	
 	@Column(name = "data_cadastro")
-	private Instant data_cadastro;
+	LocalDateTime datahora = LocalDateTime.now();
 
 	public Integer getId() {
 		return id;
@@ -107,17 +107,14 @@ public class Usuario {
 		this.apartamento = apartamento;
 	}
 
-	public Instant getData_cadastro() {
-		return data_cadastro;
+	public LocalDateTime getDatahora() {
+		return datahora;
 	}
 
-	public void setData_cadastro(Instant data_cadastro) {
-		this.data_cadastro = data_cadastro;
+	public void setDatahora(LocalDateTime datahora) {
+		this.datahora = datahora;
 	}
 
 	
-	
-	
 
-	
 }

@@ -8,6 +8,6 @@ public class HarmonyPalaceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(HarmonyPalaceApplication.class, args);
-	}
+		}
 
 }
