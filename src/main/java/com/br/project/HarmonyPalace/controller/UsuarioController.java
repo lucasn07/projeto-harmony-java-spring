@@ -3,6 +3,8 @@ package com.br.project.HarmonyPalace.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,9 +25,6 @@ import com.br.project.HarmonyPalace.service.UsuarioService;
 @RequestMapping("/usuarios")
 public class UsuarioController{
 
-	@Autowired
-	private UsuarioInterface dao;
-	
 	private UsuarioService usuarioService;
 	
 	public UsuarioController(UsuarioService usuarioService) {
@@ -44,14 +43,22 @@ public class UsuarioController{
 	
 	@PutMapping
 	public ResponseEntity<Usuario> editarUsuario (@RequestBody Usuario usuario) {
-		Usuario usuarioNovo = dao.save(usuario);
-		return ResponseEntity.status(201).body(usuarioNovo);
+		return ResponseEntity.status(200).body(usuarioService.editarUsuario(usuario));
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> excluirUsuario(@PathVariable Integer id) {
-		dao.deleteById(id);
+		usuarioService.excluirUsuario(id);
 		return ResponseEntity.status(204).build();
+	}
+	
+	@PostMapping("/login")
+	public ResponseEntity<Usuario> validarSenha(@RequestBody Usuario usuario) {
+		Boolean validação = usuarioService.validarSenha(usuario);
+		if (!validação ) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //AINDA NÃO ESTÁ FUNCIONANDO COM O FRONT-END
+		}
+		return ResponseEntity.status(200).build();	
 	}
 	
 }
