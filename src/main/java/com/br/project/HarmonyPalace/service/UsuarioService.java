@@ -25,6 +25,7 @@ public class UsuarioService {
 		return lista;
 	}
 	
+	
 	public Usuario criarUsuario(Usuario usuario) {
 		String encoder = this.passwordEncoder.encode(usuario.getSenha());
 		usuario.setSenha(encoder);
@@ -45,8 +46,8 @@ public class UsuarioService {
 	}
 
 	public Boolean validarSenha(Usuario usuario) {
-		String senha = repository.getReferenceById(usuario.getId()).getSenha();
-		Boolean comparação = passwordEncoder.matches(usuario.getSenha(), senha); //MODIFICAR ALGUMAS COISAS PARA FUNCIONAR COM O BACK-END
+		String senha = repository.getReferenceByEmail(usuario.getEmail()).getSenha();
+		Boolean comparação = passwordEncoder.matches(usuario.getSenha(), senha); //FUNCIONANDO MAIS OU MENOS, RETORNA OS ERROS 401 E 500 EM CASO DE LOGIN E OU SENHA FOREM DIFERENTES, E OU VAZIAS
 		return comparação;
 	}
 

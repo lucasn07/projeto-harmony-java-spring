@@ -56,9 +56,11 @@ public class UsuarioController{
 	public ResponseEntity<Usuario> validarSenha(@RequestBody Usuario usuario) {
 		Boolean validação = usuarioService.validarSenha(usuario);
 		if (!validação ) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //AINDA NÃO ESTÁ FUNCIONANDO COM O FRONT-END
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //FUNCIONANDO MAIS OU MENOS ... 
 		}
 		return ResponseEntity.status(200).build();	
 	}
+	
+	
 	
 }

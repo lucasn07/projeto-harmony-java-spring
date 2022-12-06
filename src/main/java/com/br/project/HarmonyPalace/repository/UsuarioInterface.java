@@ -7,4 +7,6 @@ import com.br.project.HarmonyPalace.entities.Usuario;
 
 public interface UsuarioInterface extends JpaRepository<Usuario, Integer> {
 
+	Usuario getReferenceByEmail(String email);
+	
 }
