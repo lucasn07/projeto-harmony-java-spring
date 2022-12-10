@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "tb_usuarios")
@@ -15,7 +17,6 @@ public class Usuario {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name = "ID")
 	private Integer id;
 
@@ -25,17 +26,23 @@ public class Usuario {
 	@Column(name = "id_acesso")
 	private Integer idAcesso = 1;
 	
+	@NotBlank(message = "Por favor insira um e-mail válido!")
+	@Email
 	@Column(name = "email")
 	private String  email;
 	
+	@NotBlank(message = "Por favor insira uma senha válida!")
 	@Column(name = "senha")
 	private String senha;
-	
+																//VALIDAÇÃO BÁSICA COM ANNOTATIONS DO SPRING, PORÉM FALTA TRATAR OS ERROS E TRABALHAR SEUS RETORNOS NO FRONT-END;
+	@NotBlank(message = "Por favor insira um nome válido!")
 	@Column(name = "nome")
 	private String nome;
 	
+	@NotBlank(message = "Por favor insira um telefone válido!")
 	@Column(name = "telefone")
 	private String telefone;
+	
 	
 	@Column(name = "apartamento")
 	private Integer apartamento;
