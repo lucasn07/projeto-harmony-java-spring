@@ -38,10 +38,9 @@ public class UsuarioController{
 		return ResponseEntity.status(200).body(usuarioService.listarUsuarios());
 	}
 	
-	
 	@PostMapping
 	public ResponseEntity<Usuario> criarUsuario(@Valid @RequestBody Usuario usuario) { //A annotation @valid serve para poder usar o @blank na classe Usuario;
-		return ResponseEntity.status(201).body(usuarioService.criarUsuario(usuario));
+		return ResponseEntity.status(201).body(usuarioService.criarUsuario(usuario));	
 	}
 	
 	@PutMapping
