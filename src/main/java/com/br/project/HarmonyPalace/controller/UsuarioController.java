@@ -2,9 +2,7 @@ package com.br.project.HarmonyPalace.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.project.HarmonyPalace.entities.Usuario;
-import com.br.project.HarmonyPalace.repository.UsuarioInterface;
 import com.br.project.HarmonyPalace.service.UsuarioService;
 
 import jakarta.validation.Valid;
@@ -40,7 +37,11 @@ public class UsuarioController{
 	
 	@PostMapping
 	public ResponseEntity<Usuario> criarUsuario(@Valid @RequestBody Usuario usuario) { //A annotation @valid serve para poder usar o @blank na classe Usuario;
-		return ResponseEntity.status(201).body(usuarioService.criarUsuario(usuario));	
+		try {
+			return ResponseEntity.status(201).body(usuarioService.criarUsuario(usuario));	
+		} catch (Exception e) { 
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //MELHORAR O TRATAMENTO DE ERRO ESPECIALIZADO, NÃO DEIXAR COMO EXCEPTION GENERICA.
+		}
 	}
 	
 	@PutMapping
@@ -55,14 +56,18 @@ public class UsuarioController{
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<Usuario> validarSenha(@RequestBody Usuario usuario) {
-		Boolean validação = usuarioService.validarSenha(usuario);
-		if (!validação ) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //FUNCIONANDO MAIS OU MENOS ... 
+	public ResponseEntity<Integer> validarSenha(@RequestBody Usuario usuario) {
+		try {
+			Boolean validação = usuarioService.validarSenha(usuario);
+			if (!validação) {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			} else {
+				return ResponseEntity.status(HttpStatus.OK).body(usuario.getId());
+			}	
+		} catch(NullPointerException e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-		return ResponseEntity.status(200).build();	
 	}
-	
 	
 	
 }

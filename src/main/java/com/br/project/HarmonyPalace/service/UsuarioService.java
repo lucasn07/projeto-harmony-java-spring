@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import com.br.project.HarmonyPalace.entities.Usuario;
 import com.br.project.HarmonyPalace.repository.UsuarioInterface;
 
-import jakarta.validation.Valid;
-
 @Service
 public class UsuarioService {
 
@@ -26,6 +24,7 @@ public class UsuarioService {
 		List<Usuario> lista = repository.findAll();
 		return lista;
 	}
+	
 		
 	public Usuario criarUsuario(Usuario usuario) {
 		String encoder = this.passwordEncoder.encode(usuario.getSenha());
@@ -48,15 +47,9 @@ public class UsuarioService {
 
 	public Boolean validarSenha(Usuario usuario) {
 		String senha = repository.getReferenceByEmail(usuario.getEmail()).getSenha();
-		Boolean comparação = passwordEncoder.matches(usuario.getSenha(), senha); //FUNCIONANDO MAIS OU MENOS, RETORNA OS ERROS 401 E 500 EM CASO DE LOGIN E OU SENHA FOREM DIFERENTES, E OU VAZIAS
+		Boolean comparação = passwordEncoder.matches(usuario.getSenha(), senha);
 		return comparação;
 	}
-
 	
-	
-	
-	
-	
-
 	
 }
