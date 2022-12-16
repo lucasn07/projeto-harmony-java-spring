@@ -2,6 +2,7 @@ package com.br.project.HarmonyPalace.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -55,19 +56,24 @@ public class UsuarioController{
 		return ResponseEntity.status(204).build();
 	}
 	
+	
 	@PostMapping("/login")
 	public ResponseEntity<Integer> validarSenha(@RequestBody Usuario usuario) {
+		HttpHeaders httpHeader = new HttpHeaders();
+		httpHeader.add("custom-header", "header Customizavel");
 		try {
+			Integer acesso = usuarioService.validarAcesso(usuario);
 			Boolean validação = usuarioService.validarSenha(usuario);
-			if (!validação) {
-				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			if (validação) {
+				return new ResponseEntity<Integer>(acesso, httpHeader, HttpStatus.OK);
 			} else {
-				return ResponseEntity.status(HttpStatus.OK).body(usuario.getId());
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();	
 			}	
 		} catch(NullPointerException e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 	}
+	
 	
 	
 }

@@ -1,7 +1,9 @@
 package com.br.project.HarmonyPalace.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,11 +20,17 @@ public class UsuarioService {
 	public UsuarioService(UsuarioInterface repository) {
 		this.repository = repository;
 		this.passwordEncoder = new BCryptPasswordEncoder();
+		
 	}
 	
 	public List<Usuario> listarUsuarios() {
 		List<Usuario> lista = repository.findAll();
 		return lista;
+	}
+	
+	public Integer validarAcesso(Usuario usuario) {
+		Integer idAcesso = repository.getReferenceByEmail(usuario.getEmail()).getIdAcesso();
+		return idAcesso;
 	}
 	
 		
@@ -46,10 +54,14 @@ public class UsuarioService {
 	}
 
 	public Boolean validarSenha(Usuario usuario) {
+		
 		String senha = repository.getReferenceByEmail(usuario.getEmail()).getSenha();
 		Boolean comparação = passwordEncoder.matches(usuario.getSenha(), senha);
+		
 		return comparação;
 	}
+	
+	
 	
 	
 }
