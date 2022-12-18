@@ -59,18 +59,17 @@ public class UsuarioController{
 	
 	@PostMapping("/login")
 	public ResponseEntity<Integer> validarSenha(@RequestBody Usuario usuario) {
-		HttpHeaders httpHeader = new HttpHeaders();
-		httpHeader.add("custom-header", "header Customizavel");
+		
 		try {
 			Integer acesso = usuarioService.validarAcesso(usuario);
 			Boolean validação = usuarioService.validarSenha(usuario);
 			if (validação) {
-				return new ResponseEntity<Integer>(acesso, httpHeader, HttpStatus.OK);
+				return ResponseEntity.ok(acesso);
 			} else {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();	
 			}	
 		} catch(NullPointerException e) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			return ResponseEntity.status(400).build();
 		}
 	}
 	
