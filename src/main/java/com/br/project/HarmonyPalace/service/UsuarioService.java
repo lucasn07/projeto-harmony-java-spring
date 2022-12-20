@@ -52,12 +52,19 @@ public class UsuarioService {
 		repository.deleteById(id);
 		return true;
 	}
-
+	
+	public Usuario validarEmail (Usuario usuario) {
+		Usuario emailExistente = repository.getReferenceByEmail(usuario.getEmail());
+		if (emailExistente != null) {
+			throw new Error("Email já cadastrado!");
+		}
+		Usuario validEmail = repository.save(usuario);
+		return validEmail;
+	}
+	
 	public Boolean validarSenha(Usuario usuario) {
-		
 		String senha = repository.getReferenceByEmail(usuario.getEmail()).getSenha();
 		Boolean comparação = passwordEncoder.matches(usuario.getSenha(), senha);
-		
 		return comparação;
 	}
 	

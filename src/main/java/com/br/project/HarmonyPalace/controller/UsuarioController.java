@@ -18,61 +18,61 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.project.HarmonyPalace.entities.Usuario;
 import com.br.project.HarmonyPalace.service.UsuarioService;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/usuarios")
-public class UsuarioController{
+public class UsuarioController {
 
 	private UsuarioService usuarioService;
-	
-	public UsuarioController(UsuarioService usuarioService) {
+
+	public UsuarioController(UsuarioService usuarioService) { // Injeção de dependencia atraves de contrutor, sem
+																// autowired
 		this.usuarioService = usuarioService;
 	}
-	
-	@GetMapping	
+
+	@GetMapping
 	public ResponseEntity<List<Usuario>> listarUsuario() {
 		return ResponseEntity.status(200).body(usuarioService.listarUsuarios());
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<Usuario> criarUsuario(@Valid @RequestBody Usuario usuario) { //A annotation @valid serve para poder usar o @blank na classe Usuario;
+	public ResponseEntity<Usuario> criarUsuario(@Valid @RequestBody Usuario usuario) { // A annotation @valid serve para
+																						// poder usar o @blank na classe
 		try {
-			return ResponseEntity.status(201).body(usuarioService.criarUsuario(usuario));	
-		} catch (Exception e) { 
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //MELHORAR O TRATAMENTO DE ERRO ESPECIALIZADO, NÃO DEIXAR COMO EXCEPTION GENERICA.
+			return ResponseEntity.status(201).body(usuarioService.criarUsuario(usuario));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // MELHORAR O TRATAMENTO DE ERRO
 		}
 	}
-	
+
 	@PutMapping
-	public ResponseEntity<Usuario> editarUsuario (@RequestBody Usuario usuario) {
+	public ResponseEntity<Usuario> editarUsuario(@RequestBody Usuario usuario) {
 		return ResponseEntity.status(200).body(usuarioService.editarUsuario(usuario));
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> excluirUsuario(@PathVariable Integer id) {
 		usuarioService.excluirUsuario(id);
 		return ResponseEntity.status(204).build();
 	}
-	
-	
+
 	@PostMapping("/login")
-	public ResponseEntity<Integer> validarSenha(@RequestBody Usuario usuario) {
+	public ResponseEntity<Integer> validarSenha(@RequestBody Usuario usuario, HttpSession httpSession) {
 		
 		try {
-			Integer acesso = usuarioService.validarAcesso(usuario);
+			Integer idAcesso = usuarioService.validarAcesso(usuario);
 			Boolean validação = usuarioService.validarSenha(usuario);
 			if (validação) {
-				return ResponseEntity.ok(acesso);
+				return ResponseEntity.ok(idAcesso);
 			} else {
-				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();	
-			}	
-		} catch(NullPointerException e) {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			}
+		} catch (NullPointerException e) {
 			return ResponseEntity.status(400).build();
 		}
 	}
-	
-	
-	
+
 }
