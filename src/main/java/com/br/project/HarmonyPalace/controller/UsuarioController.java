@@ -2,7 +2,6 @@ package com.br.project.HarmonyPalace.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.project.HarmonyPalace.entities.Usuario;
 import com.br.project.HarmonyPalace.service.UsuarioService;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @RestController
@@ -39,13 +37,17 @@ public class UsuarioController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Usuario> criarUsuario(@Valid @RequestBody Usuario usuario) { // A annotation @valid serve para
-																						// poder usar o @blank na classe
-		try {
-			return ResponseEntity.status(201).body(usuarioService.criarUsuario(usuario));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // MELHORAR O TRATAMENTO DE ERRO
+	public ResponseEntity<Usuario> criarUsuario(@Valid @RequestBody Usuario usuario) { // A annotation @valid serve para poder usar o @blank na classe
+		Boolean validacao = usuarioService.validarEmail(usuario);
+		if(validacao) {
+			try {
+				return ResponseEntity.status(201).body(usuarioService.criarUsuario(usuario));
+			}
+			catch (Exception e) {
+			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // criar exception personalizada para não retornar um stastus 500 
+			}	
 		}
+		return null; 
 	}
 
 	@PutMapping
@@ -60,11 +62,11 @@ public class UsuarioController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<Integer> validarSenha(@RequestBody Usuario usuario, HttpSession httpSession) {
+	public ResponseEntity<Integer> validarSenha(@RequestBody Usuario usuario) {
 		
 		try {
 			Integer idAcesso = usuarioService.validarAcesso(usuario);
-			Boolean validação = usuarioService.validarSenha(usuario);
+			Boolean validação = usuarioService.validarLogin(usuario);
 			if (validação) {
 				return ResponseEntity.ok(idAcesso);
 			} else {

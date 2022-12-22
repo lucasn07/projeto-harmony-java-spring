@@ -1,9 +1,7 @@
 package com.br.project.HarmonyPalace.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,18 +51,16 @@ public class UsuarioService {
 		return true;
 	}
 	
-	public Usuario validarEmail (Usuario usuario) {
-		Usuario emailExistente = repository.getReferenceByEmail(usuario.getEmail());
-		if (emailExistente != null) {
-			throw new Error("Email já cadastrado!");
-		}
-		Usuario validEmail = repository.save(usuario);
-		return validEmail;
+	public Boolean validarEmail (Usuario usuario) {
+		Boolean validEmail = null;
+		Usuario verificaEmail = repository.getReferenceByEmail(usuario.getEmail());
+		Boolean validacao = (validEmail != null) ? false : true; 
+		return validacao;
 	}
 	
-	public Boolean validarSenha(Usuario usuario) {
-		String senha = repository.getReferenceByEmail(usuario.getEmail()).getSenha();
-		Boolean comparação = passwordEncoder.matches(usuario.getSenha(), senha);
+	public Boolean validarLogin(Usuario usuario) {
+		String validação = repository.getReferenceByEmail(usuario.getEmail()).getSenha();
+		Boolean comparação = passwordEncoder.matches(usuario.getSenha(), validação);
 		return comparação;
 	}
 	
